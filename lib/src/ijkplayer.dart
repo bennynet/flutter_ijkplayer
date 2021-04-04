@@ -99,6 +99,9 @@ class IjkPlayerState extends State<IjkPlayer> {
         IgnorePointer(child: video),
         controllerWidget,
         statusWidget,
+        IjkBufferingWidget(
+          controller: widget.mediaController,
+        )
       ],
     );
 //    return stack;

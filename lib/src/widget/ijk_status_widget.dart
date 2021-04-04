@@ -53,6 +53,7 @@ class IjkStatusWidget extends StatelessWidget {
     if (status == IjkStatus.pause) {
       return _buildCenterIconButton(Icons.play_arrow, controller.play);
     }
+
     if (status == IjkStatus.complete) {
       return _buildCenterIconButton(Icons.replay, () async {
         await controller?.seekTo(0);
@@ -67,6 +68,46 @@ class IjkStatusWidget extends StatelessWidget {
     IjkMediaController controller,
   ) {
     return _buildCenterIconButton(Icons.play_arrow, controller.play);
+  }
+}
+
+class IjkBufferingWidget extends StatelessWidget {
+  final IjkMediaController controller;
+  const IjkBufferingWidget({
+    this.controller,
+  });
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<VideoInfo>(
+      initialData: null,
+      stream: controller.ijkBufferingStream,
+      builder: (BuildContext context, snapshot) {
+        if (snapshot.hasData && snapshot.data != null) {
+          return Center(
+            child: Container(
+                height: 80,
+                width: 150,
+                child: Column(
+                  children: [
+                    Container(
+                      width: 60,
+                      height: 60,
+                      child: RefreshProgressIndicator(
+                        backgroundColor: Colors.transparent,
+                        valueColor: AlwaysStoppedAnimation(Colors.white),
+                      ),
+                    ),
+                    Text(
+                      "缓冲中.....${(snapshot.data.tcpSpeed / 1000).toStringAsFixed(2)}kb/s",
+                      style: TextStyle(color: Colors.white),
+                    )
+                  ],
+                )),
+          );
+        }
+        return Container();
+      },
+    );
   }
 }
 

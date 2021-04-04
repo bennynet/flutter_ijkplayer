@@ -135,6 +135,13 @@ mixin IjkMediaControllerStreamMixin {
   /// errorStream
   StreamController<int> _ijkErrorController = StreamController.broadcast();
 
+  /// buffering
+
+  StreamController<VideoInfo> _ijkBufferingController =
+      StreamController.broadcast();
+
+  Stream<VideoInfo> get ijkBufferingStream => _ijkBufferingController.stream;
+
   /// # On Error stream
   ///
   /// In iOS, this value is zero for a lot of time.
@@ -207,6 +214,7 @@ mixin IjkMediaControllerStreamMixin {
     _playFinishController?.close();
     _ijkStatusController?.close();
     _ijkErrorController?.close();
+    _ijkBufferingController?.close();
 
     _playingController = null;
     _videoInfoController = null;
@@ -215,5 +223,6 @@ mixin IjkMediaControllerStreamMixin {
     _playFinishController = null;
     _ijkStatusController = null;
     _ijkErrorController = null;
+    _ijkBufferingController = null;
   }
 }

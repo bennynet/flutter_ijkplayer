@@ -332,7 +332,7 @@ class IjkMediaController
   }
 
   void _onError(int errorValueInt) async {
-    _playFinishController?.add(this);
+    //_playFinishController?.add(this);
     _ijkStatus = IjkStatus.error;
     _ijkErrorController?.add(errorValueInt);
   }

@@ -32,10 +32,11 @@ class NotifyChannel(val registry: PluginRegistry.Registrar, val textureId: Long,
         }
         player.setOnBufferingUpdateListener { mp, percent ->
             /// 在线视频缓冲
-            logi("completion buffer update $info $percent")
+            logi("completion buffer update1 $info $percent")
+            //channel.invokeMethod("buffering", info)
         }
         player.setOnSeekCompleteListener {
-            logi("onSeekCompletion $info")
+            logi("onSeekCompletion1 $info")
         }
         player.setOnErrorListener { mp, what, extra ->
             channel.invokeMethod("error", what)
@@ -51,6 +52,12 @@ class NotifyChannel(val registry: PluginRegistry.Registrar, val textureId: Long,
                 IMediaPlayer.MEDIA_INFO_VIDEO_ROTATION_CHANGED -> {
                     ijk.degree = extra
                     channel.invokeMethod("rotateChanged", info)
+                }
+                IMediaPlayer.MEDIA_INFO_BUFFERING_START  -> {
+                    channel.invokeMethod("buffering_start", info)
+                }
+                IMediaPlayer.MEDIA_INFO_BUFFERING_END  -> {
+                    channel.invokeMethod("buffering_end", info)
                 }
             }
             false

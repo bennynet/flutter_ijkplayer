@@ -29,6 +29,7 @@ class _IJKEventChannel {
   }
 
   Future<dynamic> handler(MethodCall call) async {
+    //print("********************************>>>${call.method}");
     switch (call.method) {
       case "finish": // 播放完毕
         // var index = call.arguments["type"];
@@ -41,12 +42,18 @@ class _IJKEventChannel {
       case "prepare":
         onPrepare(getInfo(call));
         break;
+      case "buffering_start": //加载中
+        onBufferingStart(getInfo(call));
+        break;
+      case "buffering_end": //加载完毕
+        onBufferingEnd();
+        break;
       case "rotateChanged":
         onRotateChanged(call);
         break;
       case "error":
-        var info = await controller.getVideoInfo();
-        _onPlayFinish(info);
+        //var info = await controller.getVideoInfo();
+        //_onPlayFinish(info);
         int errorValue = call.arguments;
         _onPlayError(errorValue);
         break;
@@ -63,6 +70,10 @@ class _IJKEventChannel {
     return VideoInfo.fromMap(map);
   }
 
+  String getInfoString(MethodCall call) {
+    return call.arguments.toString();
+  }
+
   void _onPlayFinish(VideoInfo info) {
     controller?._onPlayFinish();
   }
@@ -75,6 +86,17 @@ class _IJKEventChannel {
     controller.isPlaying = info.isPlaying;
     _prepareCompleter?.complete();
     _prepareCompleter = null;
+  }
+
+  //
+  void onBufferingStart(VideoInfo info) {
+    controller._ijkBufferingController.add(info);
+    //controller._ijkStatus = IjkStatus.buffering;
+  }
+
+  void onBufferingEnd() {
+    controller._ijkBufferingController.add(null);
+    //controller._ijkStatus = IjkStatus.playing;
   }
 
   Future<void> waitPrepare() {
