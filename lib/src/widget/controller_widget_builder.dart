@@ -266,14 +266,14 @@ class DefaultIJKControllerWidgetState extends State<DefaultIJKControllerWidget>
   OverlayEntry _tipOverlay;
 
   Widget createTooltipWidgetWrapper(Widget widget) {
-    var typography = Typography(platform: TargetPlatform.android);
+    var typography = Typography.material2018(platform: TargetPlatform.android);
     var theme = typography.white;
     const style = const TextStyle(
       fontSize: 15.0,
       color: Colors.white,
       fontWeight: FontWeight.normal,
     );
-    var mergedTextStyle = theme.body2.merge(style);
+    var mergedTextStyle = theme.bodyText1.merge(style);
     return Container(
       decoration: BoxDecoration(
         color: Colors.black.withOpacity(0.5),
@@ -341,7 +341,7 @@ class DefaultIJKControllerWidgetState extends State<DefaultIJKControllerWidget>
     var videoInfo = await controller.getVideoInfo();
     _calculator = _ProgressCalculator(details, videoInfo);
     final rotateBoxProvider = _RotateBoxProvider.of(context);
-    if(rotateBoxProvider != null && rotateBoxProvider.quarterTurns == 1){
+    if (rotateBoxProvider != null && rotateBoxProvider.quarterTurns == 1) {
       _calculator.replaceXToY = true;
     }
   }
@@ -597,7 +597,9 @@ class PortraitController extends StatelessWidget {
 
     Widget widget = Row(
       children: <Widget>[
+        buildPlayPreButton(context),
         playButton,
+        buildPlayNextButton(context),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: currentTime,
@@ -666,6 +668,28 @@ class PortraitController extends StatelessWidget {
       },
       color: Colors.white,
       icon: Icon(info.isPlaying ? Icons.pause : Icons.play_arrow),
+      iconSize: 25.0,
+    );
+  }
+
+  buildPlayNextButton(BuildContext context) {
+    return IconButton(
+      onPressed: () {
+        controller.playNext(context);
+      },
+      color: Colors.white,
+      icon: Icon(Icons.skip_next),
+      iconSize: 25.0,
+    );
+  }
+
+  buildPlayPreButton(BuildContext context) {
+    return IconButton(
+      onPressed: () {
+        controller.playPre(context);
+      },
+      color: Colors.white,
+      icon: Icon(Icons.skip_previous),
       iconSize: 25.0,
     );
   }

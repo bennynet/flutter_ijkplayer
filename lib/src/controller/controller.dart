@@ -4,6 +4,13 @@ part of '../ijkplayer.dart';
 class IjkMediaController
     with IjkMediaControllerMixin, IjkMediaControllerStreamMixin {
   /// It will automatically correct the direction of the video.
+
+  Function(BuildContext context) onClickPlayNext;
+  Function(BuildContext context) onClickPlayPre;
+
+  //bool Function() canPlayNext;
+  //bool Function() canPlayPre;
+
   bool autoRotate;
 
   int index;
@@ -227,6 +234,18 @@ class IjkMediaController
       await pause();
     } else {
       await play(pauseOther: pauseOther);
+    }
+  }
+
+  playNext(BuildContext context) {
+    if (this.onClickPlayNext != null) {
+      this.onClickPlayNext.call(context);
+    }
+  }
+
+  playPre(BuildContext context) {
+    if (this.onClickPlayPre != null) {
+      this.onClickPlayPre.call(context);
     }
   }
 
