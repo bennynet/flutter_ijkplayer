@@ -9,7 +9,7 @@ import io.flutter.view.TextureRegistry
 
 
 public class MyRegistrar {
-        lateinit var textureEntry : TextureRegistry.SurfaceTextureEntry;
+        lateinit var textureRegistry : TextureRegistry;
         lateinit var  messenger : BinaryMessenger;
         lateinit var activity: Activity;
         lateinit var getResourceHandler1: (String)->String;
@@ -18,7 +18,7 @@ public class MyRegistrar {
                 @JvmStatic
                 fun newFromRegistrar(registrar: PluginRegistry.Registrar):MyRegistrar {
                                 var instance=MyRegistrar();
-                                instance.textureEntry=registrar.textures().createSurfaceTexture();
+                                instance.textureRegistry=registrar.textures();
                                 instance.messenger=registrar.messenger();
                                 instance.activity=registrar.activity();
                                 instance.getResourceHandler1={input->registrar.lookupKeyForAsset(input)}
@@ -29,7 +29,7 @@ public class MyRegistrar {
                 @JvmStatic
                 fun newFromPluginBinding(bindding: FlutterPlugin.FlutterPluginBinding):MyRegistrar {
                         var instance=MyRegistrar();
-                        instance.textureEntry=bindding.textureRegistry.createSurfaceTexture();
+                        instance.textureRegistry=bindding.textureRegistry;
                         instance.messenger=bindding.binaryMessenger;
 
                         instance.getResourceHandler1={input->bindding.flutterAssets.getAssetFilePathByName(input)}

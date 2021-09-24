@@ -23,7 +23,7 @@ import java.io.FileInputStream
 
 class Ijk(private val registry: MyRegistrar, private val options: Map<String, Any>) {
 
-    private val textureEntry = registry.textureEntry;
+    private val textureEntry = registry.textureRegistry.createSurfaceTexture();
     val id: Long
         get() = textureEntry.id()
 

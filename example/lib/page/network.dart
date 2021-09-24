@@ -65,8 +65,16 @@ class _NetworkPageState extends State<NetworkPage> {
                 ),
               ),
               ElevatedButton(
-                child: Text("play"),
-                onPressed: _playInput,
+                child: Text("play01"),
+                onPressed: (){
+                  _playInput("http://img.ksbbs.com/asset/Mon_1703/05cacb4e02f9d9e.mp4");
+                },
+              ),
+              ElevatedButton(
+                child: Text("play02"),
+                onPressed: (){
+                  _playInput("https://cctvalih5ca.v.myalicdn.com/live/cctv1_2/index.m3u8");
+                },
               ),
             ],
           ),
@@ -81,8 +89,8 @@ class _NetworkPageState extends State<NetworkPage> {
     );
   }
 
-  void _playInput() async {
-    var text = editingController.text;
+  void _playInput(String url) async {
+    var text = url;//editingController.text;
     await mediaController.setNetworkDataSource(
       text,
       autoPlay: true,
