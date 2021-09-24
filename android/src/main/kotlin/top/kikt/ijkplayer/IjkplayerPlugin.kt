@@ -4,6 +4,11 @@ import android.content.Context
 import android.media.AudioManager
 import android.view.WindowManager
 import io.flutter.plugin.common.MethodCall
+import io.flutter.embedding.engine.plugins.FlutterPlugin;
+import io.flutter.embedding.engine.plugins.activity.ActivityAware
+import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
+import io.flutter.embedding.engine.plugins.service.ServiceAware
+import io.flutter.embedding.engine.plugins.service.ServicePluginBinding
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
@@ -14,8 +19,9 @@ import tv.danmaku.ijk.media.player.IjkMediaPlayer
 /**
  * IjkplayerPlugin
  */
-class IjkplayerPlugin(private val registrar: Registrar) : MethodCallHandler {
-    
+class IjkplayerPlugin() : MethodCallHandler,FlutterPlugin, ActivityAware {
+
+    lateinit var registrar: MyRegistrar
     override fun onMethodCall(call: MethodCall, result: Result) {
         IjkMediaPlayer.loadLibrariesOnce(null)
         IjkMediaPlayer.native_profileBegin("libijkplayer.so")
@@ -85,7 +91,7 @@ class IjkplayerPlugin(private val registrar: Registrar) : MethodCallHandler {
     }
     
     private fun setStatusBar(show: Boolean) {
-        val window = registrar.activity()?.window ?: return
+        val window = registrar.activity?.window ?: return
         if (show) {
             window.addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
             window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -127,19 +133,19 @@ class IjkplayerPlugin(private val registrar: Registrar) : MethodCallHandler {
     }
     
     private val audioManager: AudioManager
-        get() = registrar.activity().getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        get() = registrar.activity.getSystemService(Context.AUDIO_SERVICE) as AudioManager
     
     private fun setBrightness(brightness: Float) {
-        val window = registrar.activity().window
+        val window = registrar.activity.window
         val lp = window.attributes
         lp.screenBrightness = brightness
         window.attributes = lp
     }
     
     private fun getBrightness(): Float {
-        val window = registrar.activity().window
-        val lp = window.attributes
-        return lp.screenBrightness
+        val window = registrar.activity?.window
+        val lp = window?.attributes
+        return  lp!!.screenBrightness
     }
     
     fun MethodCall.getLongArg(key: String): Long {
@@ -149,7 +155,9 @@ class IjkplayerPlugin(private val registrar: Registrar) : MethodCallHandler {
     fun MethodCall.getLongArg(): Long {
         return this.arguments<Int>().toLong()
     }
-    
+
+
+
     companion object {
         lateinit var manager: IjkManager
         
@@ -159,8 +167,41 @@ class IjkplayerPlugin(private val registrar: Registrar) : MethodCallHandler {
         @JvmStatic
         fun registerWith(registrar: Registrar) {
             val channel = MethodChannel(registrar.messenger(), "top.kikt/ijkplayer")
-            channel.setMethodCallHandler(IjkplayerPlugin(registrar))
-            manager = IjkManager(registrar)
+            var registry=MyRegistrar.newFromRegistrar(registrar);
+            var plugin=IjkplayerPlugin();
+            plugin.registrar=registry;
+            channel.setMethodCallHandler(plugin)
+            manager = IjkManager(registry)
         }
+    }
+
+    override fun onAttachedToEngine(p0: FlutterPlugin.FlutterPluginBinding) {
+        val channel = MethodChannel(p0.binaryMessenger, "top.kikt/ijkplayer")
+        channel.setMethodCallHandler(this);
+        this.registrar=MyRegistrar.newFromPluginBinding(p0);
+        manager = IjkManager(this.registrar);
+
+    }
+
+    override fun onDetachedFromEngine(p0: FlutterPlugin.FlutterPluginBinding) {
+        manager.disposeAll();
+
+    }
+
+
+    override fun onAttachedToActivity(p0: ActivityPluginBinding) {
+            registrar.activity=p0.activity;
+    }
+
+    override fun onDetachedFromActivityForConfigChanges() {
+        TODO("Not yet implemented")
+    }
+
+    override fun onReattachedToActivityForConfigChanges(p0: ActivityPluginBinding) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onDetachedFromActivity() {
+        TODO("Not yet implemented")
     }
 }

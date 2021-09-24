@@ -6,7 +6,7 @@ package top.kikt.ijkplayer
 import io.flutter.plugin.common.PluginRegistry
 import java.util.*
 
-class IjkManager(private val registrar: PluginRegistry.Registrar) {
+class IjkManager(private val registrar: MyRegistrar) {
     private val ijkList = ArrayList<Ijk>()
 
     fun create(options: Map<String, Any>): Ijk {

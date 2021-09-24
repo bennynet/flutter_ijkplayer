@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ijkplayer/flutter_ijkplayer.dart';
-import 'package:ijkplayer_example/i18n/i18n.dart';
-import 'package:ijkplayer_example/utils/options_utils.dart';
+import '../utils/options_utils.dart';
 
 class NetworkPage extends StatefulWidget {
   @override
@@ -54,7 +53,7 @@ class _NetworkPageState extends State<NetworkPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(currentI18n.networkButton),
+        title: Text("network url play"),
       ),
       body: ListView(
         children: <Widget>[
@@ -65,8 +64,8 @@ class _NetworkPageState extends State<NetworkPage> {
                   controller: editingController,
                 ),
               ),
-              FlatButton(
-                child: Text(currentI18n.play),
+              ElevatedButton(
+                child: Text("play"),
                 onPressed: _playInput,
               ),
             ],

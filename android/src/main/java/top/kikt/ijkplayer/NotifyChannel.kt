@@ -4,13 +4,13 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.PluginRegistry
 import tv.danmaku.ijk.media.player.IMediaPlayer
 
-class NotifyChannel(val registry: PluginRegistry.Registrar, val textureId: Long, val ijk: Ijk) {
+class NotifyChannel(val registry: MyRegistrar, val textureId: Long, val ijk: Ijk) {
 
     private val player
         get() = ijk.mediaPlayer
 
     private val channel = MethodChannel(
-            registry.messenger(),
+            registry.messenger,
             "top.kikt/ijkplayer/event/$textureId"
     )
 //    private val channel = Temp()

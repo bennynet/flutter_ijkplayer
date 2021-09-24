@@ -21,16 +21,16 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileInputStream
 
-class Ijk(private val registry: PluginRegistry.Registrar, private val options: Map<String, Any>) {
+class Ijk(private val registry: MyRegistrar, private val options: Map<String, Any>) {
 
-    private val textureEntry = registry.textures().createSurfaceTexture()
+    private val textureEntry = registry.textureEntry;
     val id: Long
         get() = textureEntry.id()
 
     val mediaPlayer: IjkMediaPlayer = IjkMediaPlayer()
     private val textureMediaPlayer: TextureMediaPlayer
 
-    private val methodChannel: MethodChannel = MethodChannel(registry.messenger(), "top.kikt/ijkplayer/$id")
+    private val methodChannel: MethodChannel = MethodChannel(registry.messenger, "top.kikt/ijkplayer/$id")
 
     private val notifyChannel: NotifyChannel = NotifyChannel(registry, id, this)
 
@@ -145,7 +145,7 @@ class Ijk(private val registry: PluginRegistry.Registrar, private val options: M
 
 
     private val appContext: Context
-        get() = registry.activity().application
+        get() = registry.activity.application //registry.activity().application
 
     private fun configOptions() {
         // see https://www.jianshu.com/p/843c86a9e9ad
@@ -298,16 +298,16 @@ class Ijk(private val registry: PluginRegistry.Registrar, private val options: M
             }
             val asset =
                     if (`package` == null) {
-                        registry.lookupKeyForAsset(name)
+                        registry.getResourceHandler1(name)
                     } else {
-                        registry.lookupKeyForAsset(name, `package`)
+                        registry.getResourceHandler2(name, `package`)
                     }
-            val assetManager = registry.context().assets
+            val assetManager = registry.activity.assets
             val input = assetManager.open(asset)
             if (input is FileInputStream) {
                 mediaPlayer.setDataSource(input.fd)
             } else {
-                val cacheDir = registry.context().cacheDir.absoluteFile.path
+                val cacheDir = registry.activity.cacheDir.absoluteFile.path
 
                 val fileName = Base64.encodeToString(asset.toByteArray(), Base64.DEFAULT)
                 val file = File(cacheDir, fileName)

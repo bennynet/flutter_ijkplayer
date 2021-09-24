@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ijkplayer/flutter_ijkplayer.dart';
 import 'package:ijkplayer_example/page/index.dart';
-import 'package:oktoast/oktoast.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,10 +30,8 @@ class _MyAppState extends State<MyApp> {
     if (!isInitPlugin) {
       return Container();
     }
-    return OKToast(
-      child: MaterialApp(
-        home: IndexPage(),
-      ),
+    return MaterialApp(
+      home: IndexPage(),
     );
   }
 }
