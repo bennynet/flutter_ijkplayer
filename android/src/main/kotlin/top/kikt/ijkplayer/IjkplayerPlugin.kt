@@ -194,14 +194,14 @@ class IjkplayerPlugin() : MethodCallHandler,FlutterPlugin, ActivityAware {
     }
 
     override fun onDetachedFromActivityForConfigChanges() {
-        TODO("Not yet implemented")
+         
     }
 
     override fun onReattachedToActivityForConfigChanges(p0: ActivityPluginBinding) {
-        TODO("Not yet implemented")
+         
     }
 
     override fun onDetachedFromActivity() {
-        TODO("Not yet implemented")
+         
     }
 }
