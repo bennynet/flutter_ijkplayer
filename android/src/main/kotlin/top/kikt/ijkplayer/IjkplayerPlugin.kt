@@ -36,9 +36,11 @@ class IjkplayerPlugin() : MethodCallHandler,FlutterPlugin, ActivityAware {
             }
             "create" -> {
                 try {
-                    val options: Map<String, Any> = call.arguments()
-                    val ijk = manager.create(options)
-                    result.success(ijk.id)
+                    val options: Map<String, Any>? = call.arguments()
+                    val ijk = options?.let { manager.create(it) }
+                    if (ijk != null) {
+                        result.success(ijk.id)
+                    }
                 } catch (e: Exception) {
                     e.printStackTrace()
                     result.error("1", "创建失败", e)
@@ -84,7 +86,9 @@ class IjkplayerPlugin() : MethodCallHandler,FlutterPlugin, ActivityAware {
             }
             "showStatusBar" -> {
                 val show = call.arguments<Boolean>()
-                setStatusBar(show)
+                if (show != null) {
+                    setStatusBar(show)
+                }
             }
             else -> result.notImplemented()
         }
@@ -153,7 +157,7 @@ class IjkplayerPlugin() : MethodCallHandler,FlutterPlugin, ActivityAware {
     }
     
     fun MethodCall.getLongArg(): Long {
-        return this.arguments<Int>().toLong()
+        return this.arguments<Int>()!!.toLong()
     }
 
 

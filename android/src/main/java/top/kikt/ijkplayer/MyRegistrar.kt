@@ -20,7 +20,7 @@ public class MyRegistrar {
                                 var instance=MyRegistrar();
                                 instance.textureRegistry=registrar.textures();
                                 instance.messenger=registrar.messenger();
-                                instance.activity=registrar.activity();
+                                instance.activity= registrar.activity()!!;
                                 instance.getResourceHandler1={input->registrar.lookupKeyForAsset(input)}
                                 instance.getResourceHandler2={input1,input2->registrar.lookupKeyForAsset(input1,input2)}
 

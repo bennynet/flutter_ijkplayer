@@ -21,7 +21,7 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileInputStream
 
-class Ijk(private val registry: MyRegistrar, private val options: Map<String, Any>) {
+class   Ijk(private val registry: MyRegistrar, private val options: Map<String, Any>) {
 
     private val textureEntry = registry.textureRegistry.createSurfaceTexture();
     val id: Long
@@ -134,7 +134,9 @@ class Ijk(private val registry: MyRegistrar, private val options: Map<String, An
                 }
                 "setSpeed" -> {
                     val speed = call.arguments<Double>()
-                    mediaPlayer.setSpeed(speed.toFloat())
+                    if (speed != null) {
+                        mediaPlayer.setSpeed(speed.toFloat())
+                    }
                 }
                 else -> {
                     result?.notImplemented()
